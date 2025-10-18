@@ -1,0 +1,27 @@
+{
+  "scan_metadata": {
+    "scanner_name": "Advanced Web Vulnerability Scanner (Python)",
+    "version": "1.0.0",
+    "scan_date": "2025-10-19T01:39:32.064746",
+    "target_url": "https://httpbin.org",
+    "scan_duration": "0:00:46.142681"
+  },
+  "vulnerability_summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 1,
+    "low": 0,
+    "info": 0
+  },
+  "discovered_vulnerabilities": [
+    {
+      "name": "Missing Security Headers",
+      "severity": "medium",
+      "description": "Missing security headers: X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Strict-Transport-Security, Content-Security-Policy, Referrer-Policy",
+      "proof_of_concept": "Headers missing: ['X-Content-Type-Options', 'X-Frame-Options', 'X-XSS-Protection', 'Strict-Transport-Security', 'Content-Security-Policy', 'Referrer-Policy']",
+      "exploitation_method": "Implement comprehensive security headers",
+      "timestamp": "2025-10-19T01:39:30.366217"
+    }
+  ],
+  "total_vulnerabilities": 1
+}

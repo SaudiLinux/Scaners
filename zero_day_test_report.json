@@ -1,0 +1,18 @@
+{
+  "scan_metadata": {
+    "scanner_name": "Advanced Web Vulnerability Scanner (Python)",
+    "version": "1.0.0",
+    "scan_date": "2025-10-19T02:08:14.489642",
+    "target_url": "https://example.com",
+    "scan_duration": "0:02:43.954192"
+  },
+  "vulnerability_summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 0
+  },
+  "discovered_vulnerabilities": [],
+  "total_vulnerabilities": 0
+}
