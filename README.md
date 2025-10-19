@@ -318,6 +318,61 @@ LOW PRIORITY:
   🟢 Conduct regular security assessments
 ```
 
+## العمل التلقائي والتتابعي
+
+### تشغيل كامل تلقائي (أمر واحد)
+- `python complete_demonstration.py`
+- يقوم بتشغيل التطبيق الضعيف، ثم المسح، ثم محاولة الاستغلال، ثم توليد التقارير.
+
+### تشغيل متتابع يدوي
+- تثبيت الاعتماديات:
+  - `pip install -r requirements.txt`
+  - `pip install -r requirements_vulnerable.txt`
+- تشغيل التطبيق الضعيف:
+  - `python vulnerable_app.py` ثم افتح `http://127.0.0.1:5000`
+- تشغيل الماسح:
+  - `python web_scanner.py -v -o scan_report.json http://127.0.0.1:5000`
+- اختبار الاستغلال:
+  - `python poc_exploiter.py --timeout 10 -o exploitation_report.json http://127.0.0.1:5000`
+- عرض الروابط الضعيفة:
+  - `python vulnerable_urls_list.py`
+  - `python infected_links_summary.py`
+  - `python quick_reference.py`
+- تلخيص النتائج:
+  - الملفات الناتجة: `scan_report.json`, `exploitation_report.json`, `vulnerable_urls_complete.json`, `poc_summary_report.json`
+
+### ملاحظات
+- يفضّل استخدام بيئة افتراضية (`venv`) للتجربة.
+- أدوات Lua اختيارية وتحتاج تثبيت مفسّر Lua.
+- استخدم الأدوات بشكل أخلاقي وعلى بيئات مأذون بها فقط.
+
+## جدول تلخيص الأوامر السريعة
+
+| الأداة | الأمر الأساسي | الخيارات الشائعة | المثال |
+|--------|---------------|------------------|--------|
+| **الماسح الرئيسي** | `python web_scanner.py [URL]` | `-v` (مفصل)، `-o [ملف]`، `--timeout [ثواني]` | `python web_scanner.py -v -o report.json https://example.com` |
+| **أداة الاستغلال** | `python poc_exploiter.py [URL]` | `--timeout [ثواني]`، `-o [ملف]` | `python poc_exploiter.py --timeout 10 http://127.0.0.1:5000` |
+| **التطبيق الضعيف** | `python vulnerable_app.py` | لا يحتاج خيارات | `python vulnerable_app.py` (يفتح http://127.0.0.1:5000) |
+| **العرض التوضيحي الكامل** | `python complete_demonstration.py` | لا يحتاج خيارات | `python complete_demonstration.py` |
+| **قائمة الروابط الضعيفة** | `python vulnerable_urls_list.py` | لا يحتاج خيارات | `python vulnerable_urls_list.py` |
+| **ملخص الروابط المصابة** | `python infected_links_summary.py` | لا يحتاج خيارات | `python infected_links_summary.py` |
+| **المرجع السريع** | `python quick_reference.py` | لا يحتاج خيارات | `python quick_reference.py` |
+| **تلخيص إثبات المفهوم** | `python poc_summary.py` | لا يحتاج خيارات | `python poc_summary.py` |
+
+### أوامر التثبيت السريعة
+```bash
+# تثبيت جميع الاعتماديات
+pip install -r requirements.txt
+pip install -r requirements_vulnerable.txt
+
+# أوامر curl للاختبار السريع (ضد التطبيق الضعيف)
+curl "http://127.0.0.1:5000/user?id=1' UNION SELECT 1,2,3,4--"
+curl "http://127.0.0.1:5000/search?q=<script>alert('XSS')</script>"
+curl "http://127.0.0.1:5000/include?file=../../../../etc/passwd"
+curl "http://127.0.0.1:5000/execute?cmd=id;whoami"
+curl "http://127.0.0.1:5000/fetch?url=http://169.254.169.254/latest/meta-data/"
+```
+
 ## File Structure
 
 ```
@@ -336,6 +391,35 @@ Advanced-Web-Vulnerability-Scanner/
 ├── quick_reference.py          # Quick reference card
 └── test.txt                    # Test file for LFI demonstration
 ```
+
+## قائمة الأدوات
+
+- `web_scanner.py` — ماسح الثغرات الرئيسي
+- `poc_exploiter.py` — أداة استغلال إثبات المفهوم (POC)
+- `vulnerable_app.py` — تطبيق ضعيف لأغراض التعليم
+- `complete_demonstration.py` — تشغيل تلقائي متتابع شامل
+- `vulnerable_urls_list.py` — قائمة الروابط الضعيفة مع الحمولات
+- `infected_links_summary.py` — ملخص الروابط المصابة الرئيسية
+- `quick_reference.py` — بطاقة مرجعية سريعة للاختبار
+- `web_scanner.lua` — ماسح بديل بلغة Lua
+- `vulnerability_scanner.lua` — ماسح ثغرات بلغة Lua
+- `vulnerability_tests.lua` — اختبارات الثغرات (Lua)
+- `exploitation_tests.lua` — اختبارات الاستغلال (Lua)
+- `install.py` — مثبت الاعتماديات (اختياري على ويندوز)
+- `install.sh` — مثبت الاعتماديات (لينكس/ماك)
+- `requirements.txt` — الاعتماديات الأساسية
+- `requirements_vulnerable.txt` — اعتماديات التطبيق الضعيف
+
+### ملفات التقارير
+
+- `poc_test_results.json` — نتائج اختبار الاستغلال ضد هدف خارجي
+- `exploitation_report.json` — تقرير محاولة الاستغلال
+- `poc_summary_report.json` — تقرير ملخص إثبات المفهوم
+- `vulnerable_urls_complete.json` — قائمة كاملة بالروابط الضعيفة
+- `zero_day_report.json` — تقرير الثغرات من نوع Zero-Day
+- `zero_day_detailed_report.json` — تقرير مفصل لـ Zero-Day
+- `zero_day_test_report.json` — تقرير اختبارات Zero-Day
+- `test_report.json` — تقارير إضافية للاختبارات
 
 ## Troubleshooting
 
