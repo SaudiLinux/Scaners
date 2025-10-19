@@ -26,23 +26,32 @@ def start_vulnerable_app():
     """Start the vulnerable web application"""
     print("\n[1] Starting vulnerable web application...")
     
-    # Start the vulnerable app in a separate process
-    process = subprocess.Popen(
-        ['python', 'vulnerable_app.py'],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        preexec_fn=os.setsid
-    )
+    # Start the vulnerable app in a separate process on port 5001
+    # Note: os.setsid is Unix-specific, using creationflags for Windows compatibility
+    if os.name == 'nt':  # Windows
+        process = subprocess.Popen(
+            ['python', 'vulnerable_app.py', '--port', '5001'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP
+        )
+    else:  # Unix/Linux/Mac
+        process = subprocess.Popen(
+            ['python', 'vulnerable_app.py', '--port', '5001'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            preexec_fn=os.setsid
+        )
     
     # Wait for the app to start
     time.sleep(3)
     
     # Check if it's running
     try:
-        response = requests.get('http://127.0.0.1:5000', timeout=5)
+        response = requests.get('http://127.0.0.1:5001', timeout=5)
         if response.status_code == 200:
             print("[✅] Vulnerable application started successfully!")
-            print("[ℹ️ ] Application running on: http://127.0.0.1:5000")
+            print("[ℹ️ ] Application running on: http://127.0.0.1:5001")
             return process
         else:
             print("[❌] Failed to start vulnerable application")
@@ -146,7 +155,7 @@ def demonstrate_manual_exploitation():
     """Demonstrate manual exploitation techniques"""
     print("\n[4] Demonstrating manual exploitation techniques...")
     
-    base_url = "http://127.0.0.1:5000"
+    base_url = "http://127.0.0.1:5001"
     
     print("\n[🎯] Manual Exploitation Examples:")
     
@@ -265,8 +274,12 @@ def cleanup(vulnerable_process):
     if vulnerable_process:
         try:
             # Terminate the vulnerable application
-            os.killpg(os.getpgid(vulnerable_process.pid), signal.SIGTERM)
-            vulnerable_process.wait()
+            if os.name == 'nt':  # Windows
+                vulnerable_process.terminate()
+                vulnerable_process.wait()
+            else:  # Unix/Linux/Mac
+                os.killpg(os.getpgid(vulnerable_process.pid), signal.SIGTERM)
+                vulnerable_process.wait()
             print("[✅] Vulnerable application stopped")
         except:
             pass
